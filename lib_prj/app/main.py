@@ -16,20 +16,26 @@ logger = logging.getLogger(__name__)
 
 fake_db = [{"username": "vasya", "user_info": "любит колбасу"}, {"username": "katya", "user_info": "любит петь"}]
 
+#Вывод сообщения о входе в root
 @app.get("/")
 async def root():
     return {"message": "Добро пожаловать!"}
 
-@app.get("/add")
-async def index():
-    return FileResponse("index.html")
 
+# Получение списка пользователей
 @app.get('/users')
 async def get_all_users():
     return fake_db
 
+#Вывод формы для добавления пользователя
+@app.get("/add")
+async def add_user():
+    return FileResponse("add_user.html")
+
+
+# Добавление нового пользователя (параметр тела запроса)
 @app.post("/add")
-async def index(name: str = Form(), info: str = Form()):
+async def add_user(name: str = Form(), info: str = Form()):
     new_user = {"username": name, "user_info": info}
     if new_user in fake_db:
         return {"message": "Такой пользователь уже есть!"}
