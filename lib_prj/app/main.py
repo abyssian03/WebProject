@@ -16,10 +16,17 @@ logger = logging.getLogger(__name__)
 
 fake_db = [{"username": "vasya", "user_info": "любит колбасу"}, {"username": "katya", "user_info": "любит петь"}]
 
+
 #Вывод сообщения о входе в root
 @app.get("/")
 async def root():
     return {"message": "Добро пожаловать!"}
+
+
+#Вывод сообщения о входе c параметрос
+@app.get("/{username}")
+async def greeting(username: str):
+    return {"message": f"Добро пожаловать, {username}!"}
 
 
 # Получение списка пользователей
