@@ -17,22 +17,17 @@ logger = logging.getLogger(__name__)
 fake_db = [{"username": "vasya", "user_info": "любит колбасу"}, {"username": "katya", "user_info": "любит петь"}]
 
 
-#Вывод сообщения о входе в root
-@app.get("/")
-async def root():
-    return {"message": "Добро пожаловать!"}
 
-
-#Вывод сообщения о входе c параметрос
-@app.get("/{username}")
-async def greeting(username: str):
-    return {"message": f"Добро пожаловать, {username}!"}
-
-
-# Получение списка пользователей
+# Получение списка пользователей с параметрами
 @app.get('/users')
-async def get_all_users():
-    return fake_db
+async def get_users(username: str = '', limit: int = 10):
+    filtered_users = []
+
+    for user in fake_db:
+        if username.lower() in user["username"].lower():
+            filtered_users.append(user)
+
+    return filtered_users[:limit]
 
 #Вывод формы для добавления пользователя
 @app.get("/add")
@@ -50,6 +45,19 @@ async def add_user(name: str = Form(), info: str = Form()):
         your_user = User(**new_user)
         fake_db.append(your_user)
         return {"message": "Пользователь добавлен!"}
+
+
+#Вывод сообщения о входе c параметром
+@app.get("/{username}")
+async def greeting(username: str):
+    return {"message": f"Добро пожаловать, {username}!"}
+
+
+#Вывод сообщения о входе в root
+@app.get("/")
+async def root():
+    return {"message": "Добро пожаловать!"}
+
 
 #config = load_config()
 
