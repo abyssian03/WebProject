@@ -21,13 +21,10 @@ fake_db = [{"username": "vasya", "user_info": "любит колбасу"}, {"us
 # Получение списка пользователей с параметрами
 @app.get('/users')
 async def get_users(username: str = '', limit: int = 10):
-    filtered_users = []
-
-    for user in fake_db:
-        if username.lower() in user["username"].lower():
-            filtered_users.append(user)
+    filtered_users = [user for user in fake_db if username.lower() in user["username"].lower()]
 
     return filtered_users[:limit]
+
 
 #Вывод формы для добавления пользователя
 @app.get("/add")
