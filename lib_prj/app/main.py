@@ -23,8 +23,7 @@ fake_db = {1: {"username": "vasya", "user_info": "любит колбасу"}, 2
 async def get_users(username: str = '', limit: int = 10):
     filtered_users = fake_users
 
-    # if username:
-    #     filtered_users = {key: user for key, user in filtered_users.items() if username.lower() in user["username"].lower()}
+    filtered_users = {key: user for key, user in filtered_users.items() if username.lower() in user["username"].lower()}
 
     return dict(list(filtered_users.items())[:limit])
 
@@ -48,12 +47,12 @@ async def add_user(name: str = Form(), info: str = Form()):
             return {"message": "Пользователь добавлен!"}
 
 #Получение фидбэка
-# @app.post("/feedback")
-# async def get_feedback(data: Feedback):
-#     for user in fake_db:
-#         if data.username == user["username"]:
-#             return {"message": f"Спасибо за отзыв, {data.username}!"}
-#     return {"message": f"Пользователь {data.username} не зарегистрирован!"}
+@app.post("/feedback")
+async def get_feedback(data: Feedback):
+     for key in fake_db:
+         if data.username == fake_db[key]["username"]:
+             return {"message": f"Спасибо за отзыв, {data.username}!"}
+     return {"message": f"Пользователь {data.username} не зарегистрирован!"}
 
 #Вывод сообщения о входе c параметром
 @app.get("/{username}")
