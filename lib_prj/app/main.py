@@ -13,15 +13,17 @@ app = FastAPI()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+user1 = User(username = "vasya", user_info = "любит колбасу")
+user2 = User(username = "katya", user_info = "любит петь")
 
-fake_db = [{"username": "vasya", "user_info": "любит колбасу"}, {"username": "katya", "user_info": "любит петь"}]
+fake_db = [user1, user2]
 
 
 
 # Получение списка пользователей с параметрами
 @app.get('/users')
 async def get_users(username: str = '', limit: int = 10):
-    filtered_users = [user for user in fake_db if username.lower() in user["username"].lower()]
+    filtered_users = [user for user in fake_db if username.lower() in user.username.lower()]
 
     return filtered_users[:limit]
 
@@ -35,12 +37,11 @@ async def add_user():
 # Добавление нового пользователя (параметр тела запроса)
 @app.post("/add")
 async def add_user(name: str = Form(), info: str = Form()):
-    new_user = {"username": name, "user_info": info}
+    new_user = User(username = name, user_info = info)
     if new_user in fake_db:
         return {"message": "Такой пользователь уже есть!"}
     else:
-        your_user = User(**new_user)
-        fake_db.append(your_user)
+        fake_db.append(new_user)
         return {"message": "Пользователь добавлен!"}
 
 
