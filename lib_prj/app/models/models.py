@@ -8,3 +8,7 @@ class Product(BaseModel):
 class User(BaseModel):
     username: str
     user_info: str
+
+class Feedback(BaseModel):
+   username: str
+   message: str

@@ -3,7 +3,7 @@ import logging
 from fastapi import FastAPI, Form
 from fastapi.responses import FileResponse
 
-from app.models.models import User
+from app.models.models import User, Feedback
 
 #from app.config import load_config
 
@@ -43,6 +43,22 @@ async def add_user(name: str = Form(), info: str = Form()):
     else:
         fake_db.append(new_user)
         return {"message": "Пользователь добавлен!"}
+
+
+#Вывод формы для добавления отзыва
+@app.get("/feedback")
+async def add_feedback():
+    return FileResponse("add_feedback.html")
+
+
+# Добавление отзыва
+@app.post("/feedback")
+async def add_feedback(name: str = Form(), message: str = Form()):
+    new_feedback = Feedback(username = name, message = message)
+    for user in fake_db:
+        if new_feedback.username == user.username:
+            return {"message": f"Спасибо за отзыв, {name}!"}
+    return {"message": "Зарегистрируйтесь в базе, чтобы оставить отзыв"}
 
 
 #Вывод сообщения о входе c параметром
