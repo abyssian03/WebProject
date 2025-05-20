@@ -39,8 +39,7 @@ async def add_user(name: str = Form(), info: str = Form()):
     if new_user in fake_db:
         return {"message": "Такой пользователь уже есть!"}
     else:
-        # your_user = User(**new_user)
-        # fake_db.append(your_user)
+        fake_db.append(new_user)
         return {"message": "Пользователь добавлен!"}
 
 
